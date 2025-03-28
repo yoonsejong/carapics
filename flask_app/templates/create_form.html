@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create_form.css') }}">
+{% endblock %}
+
+{% block title %}Create Google Form{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card main-card">
+        <div class="card-header page-title-style">
+            <h3 class="card-title">
+                <i class="fa fa-square-poll-vertical"></i> Create Google Form
+            </h3>
+            <div id="createLoadingWheel" class="spinner-border text-success" role="status" style="display: none;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body p-40">
+            <div class="options">
+                <div class="card select-folder-card">
+                    <div class="card-header">
+                        <h5 class="card-title">Select a Google Drive folder</h5>
+                    </div>
+                    <div class="card-body select-folder-card-body">
+                        <div class="selected-folder-container">
+                            <div class="selected-folder">
+                                <i id="selectedFolderIcon" class="fa-solid fa-folder fa-3x"></i>
+                                <p id="selectedFolder" class="mt-3"></p>
+                            </div>
+                            <div>
+                                <i class="burger fa-solid fa-bars icon"></i>
+                                <div id="optionsPopup" class="popup">
+                                    <button id="seeFolder" class="popup-option">See Folder</button>
+                                    <button id="removeFolder" class="popup-option">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="selectButton" class="btn btn-primary primary-button" data-toggle="modal" data-target="#itemPickerModal"
+                            onclick="loadItems()">
+                            <i class="fa-solid fa-folder"></i> Select
+                        </button>
+                    </div>
+                </div>
+                <div class="card form-metadata-card">
+                    <div class="card-header">
+                        <h5 class="card-title">Configure your Google form</h5>
+                    </div>
+                    <div class="card-body form-metadata-card-body">
+                        <div class="form-group form-group-spacing">
+                            <label for="survey-title">Form Title</label>
+                            <input type="text" id="survey-title" placeholder="Enter survey title" class="form-control mb-2">
+                        </div>
+                        <div class="form-group form-group-spacing">
+                            <label for="survey-description">Form Description</label>
+                            <textarea id="survey-description" placeholder="Enter survey description" class="form-control mb-2"></textarea>
+                        </div>
+                        <div class="form-group form-check form-group-spacing">
+                            <input type="checkbox" id="randomize-questions" class="form-check-input">
+                            <label for="randomize-questions" class="form-check-label">Randomize question order</label>
+                        </div>
+                        <div id="survey-question" class="mt-3 form-group-spacing">
+                            <h4>Question</h4>
+                            <input type="text" id="question-text" placeholder="Question" class="form-control mb-2">
+                            <div class="options-container mb-2">
+                                <div class="option-input-container">
+                                    <input type="text" placeholder="Option" class="form-control mb-1">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(this)">Remove</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addOption()">Add Option</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card image-selection-card">
+                <div class="card-header image-card-header">
+                    <div class="image-card-title">
+                        <h5>Select images you want in your Google form</h5>
+                        <!-- <div id="imagesLoadingWheel" class="spinner-border text-success ml-3" role="status" style="display: none;">
+                            <span class="sr-only">Loading...</span>
+                        </div> -->
+                    </div>
+                    <div id="loadButtonDiv">
+                        <button type="button" id="loadImagesButton" class="btn btn-primary mt-2 primary-button" onclick="loadImages()" style="display: none;">
+                            <i class="fa-solid fa-download"></i> Load Images
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body image-card-body">
+                    <div id="openBoxIcon" class="center-this">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <div id="image-gallery" class="gallery-container form-group-spacing">
+                        <!-- thumbnails of images will be displayed here -->
+                    </div>
+                    <div id="selected-images" class="form-group-spacing" style="display: none;">
+                        <h4>Selected Images</h4>
+                        <div id="selected-image-list" class="gallery-container"></div>
+                    </div>
+                </div>
+                <div class="card-footer image-card-footer">
+                    <div id="selectAllButtonDiv">
+                        <button type="button" id="selectAllButton" class="btn btn-secondary mt-2 btn-md" onclick="selectAll()">
+                            Select All
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer options-footer">
+            <div id="createFormDiv">
+                <button type="button" id="createFormButton" class="btn btn-success primary-button" onclick="submitSurveyForm()">
+                    <i class="fa-solid fa-square-plus"></i> Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Item selection modal -->
+<div class="modal fade" id="itemPickerModal" tabindex="-1" role="dialog" aria-labelledby="itemPickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemPickerModalLabel">Select a Google Drive Folder</h5>
+                <div id="itemPickerLoadingWheel" class="spinner-border text-success ml-3" role="status" style="display: none;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="tree_container">
+                    <!-- Items displayed as a tree here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="selectItemButton" onclick="selectItem()" disabled>Select</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var createSurveyUrl = "{{ url_for('routes.create_form') }}";
+    var loadImagesFromDriveUrl = "{{ url_for('routes.load_images_from_drive') }}";
+    var getMasterFolderJsonUrl = "{{ url_for('routes.get_master_folder_json') }}";
+    var loadItemsUrl = "{{ url_for('routes.load_items') }}";
+</script>
+
+<script src="{{ url_for('static', filename='js/create_form.js') }}"></script>
+{% endblock %}

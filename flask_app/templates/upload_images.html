@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/upload_images.css') }}">
+{% endblock %}
+{% block title %}Upload Images{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card main-card">
+        <div class="card-header page-title-style">
+            <h3 class="card-title">
+                <i class="fa-solid fa-camera"></i> Upload Images
+            </h3>
+            <div id="upload_loadingWheel" class="spinner-border text-success" role="status" style="display: none;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body p-40">
+            <div class="options">
+                <div class="card select-folder-card">
+                    <div class="card-header">
+                        <h5 class="card-title">Select a Google Drive folder</h5>
+                    </div>
+                    <div class="card-body select-folder-card-body">
+                        <div class="selected-folder-container">
+                            <div class="selected-folder">
+                                <i id="selectedFolderIcon" class="fa-solid fa-folder fa-3x"></i>
+                                <p id="selectedFolder" class="mt-3"></p>
+                            </div>
+                            <div>
+                                <i class="burger fa-solid fa-bars icon"></i>
+                                <div id="optionsPopup" class="popup">
+                                    <button id="seeFolder" class="popup-option">See Folder</button>
+                                    <button id="removeFolder" class="popup-option">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="selectButton" class="btn btn-primary primary-button" data-toggle="modal" data-target="#itemPickerModal"
+                            onclick="loadItems()">
+                            <i class="fa-solid fa-folder"></i> Select
+                        </button>
+                    </div>
+                </div>
+                <div class="card file-name-template-card">
+                    <div class="card-header template-header">
+                        <h5 class="card-title">Choose a file name template</h5>
+                        <p class="template-tooltip mt-1" data-tooltip="Enter a file name template into the textbox (ex: Crab ID-pH-Crab Age-Carapace),
+                        click 'Submit' to parse all the names of the currently added images, then click 'Review' to review the collected data
+                        points, and lastly, make any necessary changes before clicking 'Confirm'.">?</p>
+                    </div>
+                    <div class="card-body file-name-template-card-body">
+                        <div id="parseTextboxDiv">
+                            <input type="text" id="file-name-template" placeholder="Enter file name template">
+                        </div>
+                        <div id="parseButtonsDiv">
+                            <button type="button" id="submitButton" class="btn btn-primary primary-button" onclick="parseFileNames()">
+                                <i class="fa-solid fa-paper-plane"></i> Submit
+                            </button>
+                            <button type="button" id="reviewButton" class="btn btn-primary primary-button" data-toggle="modal" data-target="#dataPointModal">
+                                <i class="fa-solid fa-clipboard-list"></i> Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="thumbnail_container" class="dropzone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler(event);">
+                <div class="dropzone-message">
+                    <i id="drop_zone_message_icon" class="fa-solid fa-file fa-bounce"></i>
+                    <p id="drop_zone_message_text">Drag image files here or use the "Browse" button</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer options-footer">
+            <div id="browseButtonDiv">
+                <input type="file" id="image_files" multiple onchange="addFiles()" style="display: none;">
+                <button type="button" class="btn btn-primary primary-button" onclick="triggerFileInput()">
+                    <i class="fa-solid fa-folder-open"></i> Browse
+                </button>
+            </div>
+            <div id="uploadButtonDiv">
+                <button type="button" class="btn btn-success primary-button" data-toggle="modal" data-target="#uploadModal"
+                    disabled id="uploadButton">
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card bottom-card" style="display: none;">
+        <div class="card-header bottom-card-header" style="text-align: center;">
+            <h5 id="imageName" class="card-title"></h5>
+        </div>
+        <div class="card-body full-image-display-body">
+            <div id="imageAndDataPointsContainer" class="card-body d-flex">
+                <div id="imageContainer" class="mr-4">
+                    <img id="imageElement" class="image-only">
+                </div>
+                <div id="dataPointsContainer" class="scrollable-box"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Item selection modal -->
+<div class="modal fade" id="itemPickerModal" tabindex="-1" role="dialog" aria-labelledby="itemPickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemPickerModalLabel">Select a Google Drive Folder</h5>
+                <div id="itemPickerLoadingWheel" class="spinner-border text-success ml-3" role="status" style="display: none;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="tree_container">
+                    <!-- Items displayed as a tree here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="text" id="itemInput" placeholder="Enter Item" class="form-control">
+                <button type="button" class="btn btn-info" id="renameItemButton" onclick="renameItem()" disabled>Rename</button>
+                <button type="button" class="btn btn-primary" id="createFolderButton" onclick="createFolder()">Create Folder</button>
+                <button type="button" class="btn btn-danger" id="deleteItemButton" onclick="deleteItem()" disabled>Delete</button>
+                <button type="button" class="btn btn-success" id="selectItemButton" onclick="selectItem()" disabled>Select</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- data point modal -->
+<div class="modal fade" id="dataPointModal" tabindex="-1" role="dialog" aria-labelledby="dataPointModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dataPointModalLabel">Data Point Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Parsed File Data</h5>
+                <div id="parsedTable"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="addPresetDataPoints()" data-dismiss="modal">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to upload the selected files?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="uploadFiles()" data-dismiss="modal">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="progressModalLabel">Uploading...</h5>
+                <div id="progressWheel" class="spinner-border text-success ml-3" role="status" style="display: none;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div id="progress-bar-fill" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="uploadCancelBtn" style="display: block;">Cancel</button>
+                <button type="button" class="btn btn-primary" id="uploadOkBtn" style="display: none;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancelConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelConfirmationModalLabel">Confirm Cancellation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel the upload?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" id="confirmCancelBtn">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var uploadImagesUrl = "{{ url_for('routes.upload_images') }}";
+    var loadItemsUrl = "{{ url_for('routes.load_items') }}";
+    var createFolderUrl = "{{ url_for('routes.create_folder') }}";
+    var renameItemUrl = "{{ url_for('routes.rename_item') }}";
+    var deleteItemUrl = "{{ url_for('routes.delete_item') }}";
+    var getMasterFolderJsonUrl = "{{ url_for('routes.get_master_folder_json') }}";
+</script>
+
+<script src="{{ url_for('static', filename='js/upload_images.js') }}"></script>
+{% endblock %}

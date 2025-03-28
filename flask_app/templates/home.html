@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Carapics Homepage!</h1>
+{% if 'credentials' in session %}
+    <div class="body-part">
+        <div class="section" id="overview">
+            <h2>General Overview</h2>
+            <p>Welcome! To get started, the admin should select a master Google Drive folder, which is a root folder in their Google Drive, and can be selected in the settings page. This master folder will be the home directory for all operations on the website.</p>
+            <p>Make sure to give anyone who will be using the website access to the master folder in Google Drive.</p>
+            <img src="static/media/Settings.gif" alt="Select Master Folder" class="gif">
+        </div>
+    
+        <div class="section" id="upload-images">
+            <h2>How to Upload Images</h2>
+            <p>Navigate to the "Upload Images" page, then hit browse or drag and drop image files into the dropzone, marked by the dotted blue box.</p>
+            <p>Select a folder to place the images in, which will be any folder in the master folder. You may create, rename, or delete folders in the website by using the necessary buttons. If you want to create a folder within a folder (a 'subfolder'), first select any folder and then create. To view subfolders, double click the folder that contains such.</p>
+            <img src="static/media/select_folder.gif" alt="Select, Create, Rename, or Delete Folders" class="gif">
+            <p>Click on image thumbnails in the dropzone to edit the data points associated with the image. For example, if uploading images with crabs and including their associated data, click on an image, type pH as the name, and the pH value in the value box. Add or remove as many data points as necessary.</p>
+            <img src="static/media/add_data.gif" alt="Edit Data Points for Images" class="gif">
+            <p>You can streamline this process by typing in a file name template, where you type the data point names in one string, separated by '-', corresponding to the file names of each image. If the file name follows the provided format, it will parse the names by the '-' symbol and the last detected '.' (to cut off the file extension) after clicking 'Submit', and save it into a table viewable with the 'Review' button.</p>
+            <p>If an image does not follow the correct format, it will insert values as "invalid" and highlight the row red. Edit the table as needed before hitting 'Confirm' to automatically add all the data points to the images.</p>
+            <img src="static/media/parse_data.gif" alt="File Name Template and Review Button" class="gif">
+            <p>Click 'Upload' when ready. The images will be uploaded to the selected folder, or to the master folder if no folder was selected. It is recommended to save images to a folder for organization purposes.</p>
+            <p>Upon upload, if a spreadsheet does not exist, one will be created in the master folder tracking all the data point data from the batch of images. If a spreadsheet exists, it will append the data points to the same spreadsheet. This spreadsheet tracks the image path, name, link, Google Drive ID, and any added data points.</p>
+            <p class="highlight">Be careful though, because it is case sensitive, so be aware of creating duplicate columns because of a typo!!</p>
+            <img src="static/media/upload_images.gif" alt="Upload Process" class="gif">
+        </div>
+    
+        <div class="section" id="create-form">
+            <h2>How to Create a Form</h2>
+            <p>On the "Create Form" page, enter a form title, form description, randomize questions, and add a question with as many options as necessary.</p>
+            <p>Select a folder in the master folder and load the images stored in that folder. Click on images to select them, or click on selected images to remove them from the selected gallery. You may also click 'Select All' to select all images. Once ready, hit 'Create' to automatically create the form and place it in the master folder. A question will be created for each selected image.</p>
+            <p>When a form is created, a separate sheet will be created in the master folder spreadsheet that orders the questions as they are in the form. It is also used for internal form metadata tracking purposes.</p>
+            <img src="static/media/create_google_form.gif" alt="Form Creation" class="gif">
+        </div>
+    
+        <div class="section" id="form-data">
+            <h2>Form Data</h2>
+            <p>On the "Form Data" page, select a form to display its response data. If there is no response data, you will be alerted.</p>
+            <p>If a form has responses, view the number of responses, question number, image path, image link, image ID, total question option selections for each question, and the data points for each image.</p>
+            <p>Click 'Customize' to customize the colors of each column for organization, and click 'Export' to export the data in the table to a CSV or an Excel file. Colors that you select are saved within the session, however the table resets on window reload. To re-instate previously selected colors, open the customization window and simply re-save your colors.</p>
+            <img src="static/media/form_data.gif" alt="Select Form and View Response Data, and Customize and Export Data" class="gif">
+        </div>
+    
+        <div class="section" id="contact">
+            <h2>Contact Information</h2>
+            <p>If users (students or researchers) have any questions or concerns, please contact your admin/supervisor.</p>
+            <p>If anyone has any technical issues or concerns, email <a href="mailto:sorvinn1@tcnj.edu">sorvinn1@tcnj.edu</a> or <a href="mailto:yoons@tcnj.edu">yoons@tcnj.edu</a>.</p>
+        </div>
+
+        <div class="section">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Crab body -->
+                <ellipse cx="100" cy="100" rx="60" ry="40" fill="#346beb" stroke="black" stroke-width="3"/>
+                
+                <!-- Left claw -->
+                <path d="M40,60 Q20,30 10,40 Q20,60 40,60" fill="#346beb" stroke="black" stroke-width="3"/>
+                <circle cx="40" cy="60" r="10" fill="#346beb" stroke="black" stroke-width="3"/>
+                
+                <!-- Right claw -->
+                <path d="M160,60 Q180,30 190,40 Q180,60 160,60" fill="#346beb" stroke="black" stroke-width="3"/>
+                <circle cx="160" cy="60" r="10" fill="#346beb" stroke="black" stroke-width="3"/>
+                
+                <!-- Left legs -->
+                <line x1="40" y1="100" x2="10" y2="100" stroke="black" stroke-width="3"/>
+                <line x1="40" y1="120" x2="10" y2="130" stroke="black" stroke-width="3"/>
+                <line x1="40" y1="140" x2="10" y2="160" stroke="black" stroke-width="3"/>
+                
+                <!-- Right legs -->
+                <line x1="160" y1="100" x2="190" y2="100" stroke="black" stroke-width="3"/>
+                <line x1="160" y1="120" x2="190" y2="130" stroke="black" stroke-width="3"/>
+                <line x1="160" y1="140" x2="190" y2="160" stroke="black" stroke-width="3"/>
+                
+                <!-- Eyes -->
+                <circle cx="80" cy="80" r="5" fill="black"/>
+                <circle cx="120" cy="80" r="5" fill="black"/>
+              </svg>              
+        </div>
+    </div>
+{% else %}
+    <!-- If user is not logged in, prints message referring user to login page -->
+    <p>Please <a href="{{ url_for('auth.login') }}">login</a>.</p>
+{% endif %}
+
+{% endblock %}

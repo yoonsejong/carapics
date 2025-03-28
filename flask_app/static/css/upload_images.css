@@ -1,0 +1,565 @@
+/* Page container */
+.container {
+    max-width: 95% !important;
+}
+
+/* main card */
+.main-card {
+    margin-bottom: 40px;
+}
+
+/* tier 2 button styling */
+.primary-button {
+    padding: 10px 20px;
+    box-sizing: border-box; /* Ensure padding is included in the button's overall size */
+    align-self: center; /* Prevent the button from stretching to the height of the parent */
+    justify-self: flex-end;
+    white-space: nowrap;
+}
+
+/* ----------------------------------------------------- Main Card Header ----------------------------------------------------- */
+
+.card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.page-title-style {
+    background-color: rgb(255, 255, 255);
+    color: rgb(80, 77, 77);
+    border-bottom: none;
+}
+
+/* ----------------------------------------------------- Main Card Body ----------------------------------------------------- */
+
+.p-40 {
+    padding: 40px;
+    gap: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.options {
+    width: 42%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* options min sizes */
+.select-folder-card, .file-name-template-card {
+    min-width: 503.50px;
+}
+
+/* Select Folder Card */
+.select-folder-card {
+    box-sizing: border-box;
+    height: 185px;
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.select-folder-card-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.selected-folder-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    width: 340px;
+    height: 84px;
+    background-color: #efefef; /* defaults to transparent */
+    border-radius: 10px;
+}
+
+.selected-folder {
+    display: flex; /* defaults to none */
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    gap: 10px;
+}
+
+.icon { /* common styles for clickable icons */
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: transparent; /* Make background clear */
+    transition: background-color 0.3s ease; /* Add transition */
+    color: #353A40;
+    font-size: 1rem; /* Smaller icon size */
+    padding: 7px; /* Padding to increase clickable area */
+    text-decoration: none; /* Remove underline */
+}
+
+.icon:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent background on hover */
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.popup-option {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #353A40;
+
+}
+
+.popup-option:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes growFromInwardEffect {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.tiny-grow {
+    animation: growFromInwardEffect 2s forwards;
+}
+
+/* file name template card */
+.file-name-template-card {
+    box-sizing: border-box;
+    height: 185px;
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.template-header {
+    display: flex;
+    justify-content: top;
+}
+
+/* Tooltip container */
+.template-tooltip {
+    position: relative;
+    cursor: pointer;
+    background-color: transparent;
+    color: grey;
+    border: 1px solid grey;
+    border-radius: 50%;
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+    line-height: 20px; /* Center the text vertically */
+    text-align: center;
+}
+  
+/* Tooltip text */
+.template-tooltip::before {
+    width: 350px;
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%; /* Position above the element */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    white-space: wrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 1001; /* Ensure tooltip is above other elements */
+}
+  
+  /* Show tooltip text on hover */
+.template-tooltip:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* actual content of template card */
+.file-name-template-card-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+#parseTextboxDiv {
+    display: flex;
+    align-self: center;
+    width: 50%;
+    height: 50px;
+    flex: 0 0 auto;
+}
+
+#file-name-template {
+    width: 100%;
+    padding: 10px 20px;
+    justify-content: center;
+}
+
+#parseButtonsDiv {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    width: 200px;
+}
+
+/* data point modal */
+/* .tabulator-row:hover .tabulator-row-odd {
+    background-color: #FFFFFF !important;
+}
+
+.tabulator-row:hover .tabulator-row-even {
+    background-color: #EFEFEF !important;
+} */
+
+/* Thumbnail gallery */
+.dropzone {
+    width: 55%;
+    height: 600px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 4 columns */
+    grid-template-rows: repeat(3, 1fr); /* 4 rows */
+    gap: 10px;
+    padding: 10px;
+    border: 2px dashed #007bff;
+    border-radius: 5px;
+    overflow: auto;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dropzone-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    grid-column: 2; /* Position in the middle column */
+    grid-row: 2; /* Position in the middle row */
+    color: #007bff;
+}
+
+#drop_zone_message_icon {
+    display: block;
+    font-size: 40px;
+}
+
+#drop_zone_message_text {
+    display: block;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+.dropzone.dragover {
+    animation: borderPulse 1.5s infinite;
+    background-color: #e0f7fa;
+}
+
+@keyframes borderPulse {
+    0%, 100% {
+        border-width: 2px;
+    }
+    50% {
+        border-width: 6px;
+    }
+}
+
+.thumbnail {
+    display: flex; /* Use flexbox for centering content */
+    flex-direction: column;
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.thumbnail img {
+    border-radius: 5px;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    transition: outline 0.2s;
+}
+
+.thumbnail:hover img {
+    outline: 3px solid #7e9aff;
+}
+
+.thumbnail p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.thumbnail .remove-button {
+    display: block;
+    margin-top: 5px;
+    width: 100%;
+}
+
+/* ----------------------------------------------------- Main Card Footer ----------------------------------------------------- */
+
+.options-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ----------------------------------------------------- Image Display Card ----------------------------------------------------- */
+
+/* Full image display */
+.bottom-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 100%;
+}
+
+.bottom-card-header {display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(179, 179, 211);
+}
+
+.full-image-display-body {
+    padding: 20px;
+    gap: 20px
+}
+
+#imageContainer {
+    max-width: 50%;
+}
+
+.image-only {
+    max-width: auto;
+    height: auto;
+    max-height: 448.88px;
+    max-width: 100%;
+}
+
+#dataPointsContainer {
+    width: 100%;
+    max-height: 448.88px;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    overflow-y: auto;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.data-point-pair {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.data-point-name {
+    flex: 1;
+    margin-right: 10px;
+    height: 40px;
+    padding: 5px;
+}
+
+.data-point-input {
+    flex: 1;
+    height: 40px;
+    padding: 4px;
+    max-width: 120px;
+}
+
+.remove-data-point-button {
+    margin-left: 10px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#additionalAddDataPointButton {
+    width: 100%;
+}
+
+/* ----------------------------------------------------- Item Picker Modal ----------------------------------------------------- */
+
+/* Styling for item picker popup */
+#itemPickerModal .modal-dialog.modal-lg {
+    max-width: 60%;
+}
+
+#itemPickerModal .modal-content {
+    height: 50vh;
+}
+
+#itemPickerModal .modal-body {
+    overflow-y: auto;
+}
+
+#itemPickerModal .modal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#itemPickerModal .modal-footer .form-control {
+    flex: 1;
+    min-width: 200px;
+}
+
+#tree_container ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+#tree_container li {
+    cursor: pointer;
+    padding: 5px;
+    user-select: none;
+}
+
+#tree_container li:hover {
+    background-color: #f1f1f1;
+}
+
+#tree_container .item::before {
+    content: "\f07b";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px;
+    color: #007bff;
+}
+
+#tree_container .selected-item {
+    background-color: #007bff;
+    color: white;
+}
+
+#tree_container .selected-item::before {
+    color: white;
+}
+
+#tree_container .selected-item:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Item picker loading wheel */
+.spinner-border {
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Progress bar */
+#progress-bar {
+    width: 100%;
+    background-color: #f3f3f3;
+}
+
+#progress-bar-fill {
+    background-color: #4caf50;
+    height: 100%;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+/* Full image display */
+#fullImageDisplay {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 100%;
+}
+
+#imageContainer {
+    margin-right: 20px;
+    max-width: 50%;
+}
+
+.image-only {
+    max-width: 100%;
+    height: auto;
+}
+
+#dataPointsContainer {
+    flex: 1;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+
+#dataPointsInnerContainer {
+    width: 100%;
+    overflow-y: auto;
+    padding-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    background-color: #fff;
+    height: 100%;
+    max-height: 320px;
+}
+
+.data-point-pair {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.data-point-name {
+    flex: 1;
+    margin-right: 10px;
+    height: 40px;
+    padding: 5px;
+}
+
+.data-point-input {
+    flex: 1;
+    height: 40px;
+    padding: 4px;
+    max-width: 120px;
+}
+
+.remove-data-point-button {
+    margin-left: 10px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#additionalAddDataPointButton {
+    width: 100%;
+}

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/form_data.css') }}">
+{% endblock %}
+{% block title %}Survey Data{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card main-card">
+        <div class="card-header page-title-style">
+            <h3 class="card-title"><i class="fa-solid fa-table"></i> Google Form Data</h3>
+            <div id="loadingWheel" class="spinner-border text-success mb-2 loading-wheel" role="status" style="display: none;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body p-40">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Select a Google Form</h5>
+                </div>
+                <div class="card-body select-form-body">
+                    <div class="selected-form-parts">
+                        <div class="selected-form-container">
+                            <div class="selected-form">
+                                <i id="selectedFormIcon" class="fa-solid fa-file-alt fa-3x"></i>
+                                <p id="selectedForm" class="mt-3"></p>
+                            </div>
+                            <div>
+                                <i class="burger fa-solid fa-bars icon"></i>
+                                <div id="optionsPopup" class="popup">
+                                    <button id="seeForm" class="popup-option">See Form</button>
+                                    <button id="removeForm" class="popup-option">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="background-div"> <!-- background div -->
+                            <p id="missing_form_msg" class="mt-2">Psst... there's no form here</p>
+                        </div>
+                        <div class="response-counter">
+                            <div id="response-title"></div>
+                            <div id="response-count"></div>
+                        </div>
+                    </div>
+                    <button type="button" id="selectButton" class="btn btn-primary primary-button" data-toggle="modal" data-target="#itemPickerModal"
+                        onclick="loadItems()">
+                        <i class="fa-solid fa-folder"></i> Select
+                    </button>
+                </div>
+            </div>
+            <div id="tableParent">
+                <div id="data-table"></div>
+                <div id="tableOptions" style="display: none;">
+                    <button type="button" id="exportDataButton" class="btn btn-success primary-button" style="float: right; margin-left: 10px;" data-toggle="modal" data-target="#exportDataModal">
+                        <i class="fa-solid fa-file-export"></i> Export Data
+                    </button>
+                    <button type="button" id="customizeTableButton" class="btn btn-secondary primary-button" style="float: right;" data-toggle="modal" data-target="#customTableModal">
+                        <i class="fa-solid fa-palette"></i> Customize
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Item selection modal -->
+<div class="modal fade" id="itemPickerModal" tabindex="-1" role="dialog" aria-labelledby="itemPickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemPickerModalLabel">Select a Google Drive Form</h5>
+                <div id="itemPickerLoadingWheel" class="spinner-border text-success ml-3 mt-1 loading-wheel" role="status" style="display: none;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="tree_container">
+                    <!-- Items displayed as a tree here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="selectItemButton" onclick="selectItem()" disabled>Select</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customize table modal -->
+<div class="modal fade" id="customTableModal" tabindex="-1" role="dialog" aria-labelledby="customTableModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="customTableModalLabel">Customize Your Table</h3>
+                <div id="loadingWheel_customTable" class="spinner-border text-success ml-3 mt-1 loading-wheel" role="status" style="display: none;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="colorPickerDiv" class="form-group">
+                    <h6>Select Column Colors</h6>
+                    <div id="colorTableContainer">
+                        <!-- Table contents will be dynamically filled here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="saveCustomTableButton" onclick="saveCustomTable()" disabled>Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Export data modal -->
+<div class="modal fade" id="exportDataModal" tabindex="-1" role="dialog" aria-labelledby="exportDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportDataModalLabel">Choose How to Export Your Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button id="export-csv-btn" class="btn btn-primary" onclick="exportToCSV()">
+                    <i class="fas fa-file-csv"></i> Export to CSV
+                </button>
+                <button id="export-excel-btn" class="btn btn-primary" onclick="exportToExcel()">
+                    <i class="fas fa-file-excel"></i> Export to Excel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- for exporting xlsx file -->
+<script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+
+<script>
+    var getMasterFolderJsonUrl = "{{ url_for('routes.get_master_folder_json') }}";
+    var loadFormsUrl = "{{ url_for('routes.load_forms') }}";
+    var fetchFormData = "{{ url_for('routes.fetch_form_data') }}";
+</script>
+
+<script src="{{ url_for('static', filename='js/form_data.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,300 @@
+/* create_survey.css */
+
+/* Page container */
+.container {
+    max-width: 95% !important;
+}
+
+/* main card */
+.main-card {
+    margin-bottom: 40px;
+}
+
+/* tier 2 button styling */
+.primary-button {
+    padding: 10px 20px;
+    box-sizing: border-box; /* Ensure padding is included in the button's overall size */
+    align-self: center; /* Prevent the button from stretching to the height of the parent */
+    justify-self: flex-end;
+}
+
+/* ----------------------------------------------------- Main Card Header ----------------------------------------------------- */
+
+.card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.page-title-style {
+    background-color: rgb(255, 255, 255);
+    color: rgb(80, 77, 77);
+    border-bottom: none;
+}
+
+/* ----------------------------------------------------- Main Card Body ----------------------------------------------------- */
+
+.p-40 {
+    padding: 40px;
+    gap: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.options {
+    width: 42%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Select Folder Card */
+.select-folder-card {
+    box-sizing: border-box;
+    height: 185px;
+    display: flex;
+    flex: 0 0 auto;
+    min-width: 503.50px;
+}
+
+.select-folder-card-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.selected-folder-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    width: 340px;
+    height: 84px;
+    background-color: #efefef; /* defaults to transparent */
+    border-radius: 10px;
+}
+
+.selected-folder {
+    display: flex; /* defaults to none */
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    gap: 10px;
+}
+
+.icon { /* common styles for clickable icons */
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: transparent; /* Make background clear */
+    transition: background-color 0.3s ease; /* Add transition */
+    color: #353A40;
+    font-size: 1rem; /* Smaller icon size */
+    padding: 7px; /* Padding to increase clickable area */
+    text-decoration: none; /* Remove underline */
+}
+
+.icon:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent background on hover */
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.popup-option {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #353A40;
+
+}
+
+.popup-option:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes growFromInwardEffect {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.tiny-grow {
+    animation: growFromInwardEffect 2s forwards;
+}
+
+/* form meta data */
+.form-metadata-card-body {
+    height: 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+#survey-question {
+    overflow: auto;
+    max-height: 180px;
+}
+
+/* Styling for question options */
+.btn-sm {
+    font-size: 0.875rem;
+}
+
+.option-input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.option-input-container button {
+    margin-left: 10px;
+}
+
+/* ----------------------------------------------------- Select Images Card ----------------------------------------------------- */
+
+.image-selection-card {
+    width: 55%;
+    height: 798px;
+}
+
+.image-card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.image-card-body {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.center-this {
+    display: flex;
+    margin: auto;
+    justify-items: center;
+    align-items: center;
+}
+
+#openBoxIcon {
+    font-size: 150px;
+    color: lightgrey;
+}
+
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.thumbnail {
+    width: 100%;
+    height: auto;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.thumbnail:hover {
+    border: 2px solid blue;
+}
+
+.removable-thumbnail:hover {
+    border: 2px solid red;
+}
+
+.image-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#selectAllButton {
+    box-sizing: border-box; /* Ensure padding is included in the button's overall size */
+    align-self: center; /* Prevent the button from stretching to the height of the parent */
+    justify-self: flex-end;
+}
+
+/* ----------------------------------------------------- Main Card Footer ----------------------------------------------------- */
+
+.options-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ----------------------------------------------------- Item picker modal ----------------------------------------------------- */
+
+/* Styling for item picker popup */
+#itemPickerModal .modal-dialog.modal-lg {
+    max-width: 60%;
+}
+
+#itemPickerModal .modal-content {
+    height: 50vh;
+}
+
+#itemPickerModal .modal-body {
+    overflow-y: auto;
+}
+
+#itemPickerModal .modal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Styling for item tree in item picker popup */
+#tree_container ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+#tree_container li {
+    cursor: pointer;
+    padding: 5px;
+    user-select: none;
+}
+
+#tree_container li:hover {
+    background-color: #f1f1f1;
+}
+
+#tree_container .item::before {
+    content: "\f07b";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px;
+    color: #007bff;
+}
+
+#tree_container .selected-item {
+    background-color: #007bff;
+    color: white;
+}
+
+#tree_container .selected-item::before {
+    color: white;
+}
+
+#tree_container .selected-item:hover {
+    background-color: #007bff;
+    color: white;
+}
