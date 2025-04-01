@@ -30,7 +30,7 @@ Setting up a server requires some technical fluency in web application developme
 * You also want to set the master Google Drive folder information inside flask_app/master_folder.json.
 
 ## Related Publications
-* Gary H. Dickinson, Sejong Yoon, Nate Sorvino, Sameer Kamal, Corin J. Hoppe, Isra Ahmad. "Carapics: A Web-based Platform for Semi-quantitative Analysis of Structural Change in Biological Samples." Benthic Ecology Meeting, April 1, 2025.
+* Gary H. Dickinson, Sejong Yoon, Nate Sorvino, Sameer Kamal, Corin J. Hoppe, Isra Ahmad. "Carapics: A Web-based Platform for Semi-quantitative Analysis of Structural Change in Biological Samples." Annual Benthic Ecology Meeting, April, 2025.
 
 ## History
 * v0.9.1: README update
